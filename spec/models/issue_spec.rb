@@ -7,4 +7,5 @@ RSpec.describe Issue, type: :model do
   it { should validate_presence_of(:title) }
   it { should validate_presence_of(:created_by) }
   it { should validate_presence_of(:assigned_to) }
+  it { should validate_presence_of(:status) }
 end

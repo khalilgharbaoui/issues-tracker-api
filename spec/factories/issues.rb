@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :issue do
-    title "MyString"
-    created_by "MyString"
-    assigned_to "MyString"
-    status "MyString"
+    title "Fake issue nr 1"
+    created_by "user_1"
+    assigned_to "nobody"
+    status "pending"
   end
 end
