@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :issue do
-    title "Fake issue nr 1"
-    created_by "user_1"
-    assigned_to "nobody"
+    title { Faker::Lorem.word }
+    created_by { Faker::Number.number(10) }
+    assigned_to { Faker::Number.number(10) }
     status "pending"
   end
 end
