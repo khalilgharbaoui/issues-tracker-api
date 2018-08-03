@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Issues API', type: :request do
   let!(:issues) { create_list(:issue, 10) }
+  let(:issue_id) { issues.first.id }
 
   describe 'GET /issues' do
     before { get '/issues' }
@@ -47,6 +48,33 @@ RSpec.describe 'Issues API', type: :request do
       it 'returns a validation failure message' do
         expect(response.body)
           .to match(/Validation failed: Created by can't be blank, Assigned to can't be blank, Status can't be blank/)
+      end
+    end
+  end
+
+  describe 'GET /issues/:id' do
+    before { get "/issues/#{issue_id}" }
+
+    context 'when the record exists' do
+      it 'returns the issue' do
+        expect(json).not_to be_empty
+        expect(json['id']).to eq(issue_id)
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context 'when the record does not exist' do
+      let(:issue_id) { 100 }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns a not found message' do
+        expect(response.body).to match(/Couldn't find Issue/)
       end
     end
   end

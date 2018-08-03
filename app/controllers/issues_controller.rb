@@ -1,4 +1,5 @@
 class IssuesController < ApplicationController
+  before_action :set_issue, only: [:show, :update, :destroy]
 
   # GET /issues
   def index
@@ -17,7 +18,16 @@ class IssuesController < ApplicationController
       end
   end
 
+  # GET /issues/:id
+  def show
+    json_response(@issue)
+  end
+
   private
+
+  def set_issue
+      @issue = Issue.find(params[:id])
+  end
 
   def issue_params
     params.permit(:title, :created_by, :assigned_to, :status)
