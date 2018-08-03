@@ -3,19 +3,19 @@ class IssuesController < ApplicationController
 
   # GET /issues
   def index
-      @issues = Issue.all
-      render json: @issues, status: :ok
+    @issues = Issue.all
+    render json: @issues, status: :ok
   end
 
   # POST /issues
   def create
-      begin
-        @issue = Issue.create!(issue_params)
-        render json: @issue, status: :created
-      rescue Exception => e
-        # raise e
-        render json: { message: e.message }, status: :unprocessable_entity
-      end
+    begin
+      @issue = Issue.create!(issue_params)
+      render json: @issue, status: :created
+    rescue Exception => e
+      # raise e
+      render json: { message: e.message }, status: :unprocessable_entity
+    end
   end
 
   # GET /issues/:id
@@ -23,10 +23,22 @@ class IssuesController < ApplicationController
     json_response(@issue)
   end
 
+  # PUT /issues/:id
+  def update
+    @issue.update(issue_params)
+    head :no_content
+  end
+
+  # DELETE /issues/:id
+  def destroy
+    @issue.destroy
+    head :no_content
+  end
+
   private
 
   def set_issue
-      @issue = Issue.find(params[:id])
+    @issue = Issue.find(params[:id])
   end
 
   def issue_params
