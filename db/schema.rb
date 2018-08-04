@@ -10,13 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_02_223429) do
+ActiveRecord::Schema.define(version: 2018_08_03_030847) do
 
   create_table "issues", force: :cascade do |t|
     t.string "title"
     t.string "created_by"
     t.string "assigned_to"
-    t.string "status"
+    t.string "status", default: "pending"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "password_digest"
+    t.boolean "manager", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
