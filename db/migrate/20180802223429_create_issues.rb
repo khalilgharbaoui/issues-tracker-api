@@ -4,7 +4,7 @@ class CreateIssues < ActiveRecord::Migration[5.2]
       t.string :title
       t.string :created_by
       t.string :assigned_to
-      t.string :status
+      t.string :status, default: "pending"
 
       t.timestamps
     end
