@@ -1,5 +1,17 @@
 require 'rails_helper'
 
+# Test suite for User model
 RSpec.describe User, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  # Association test
+  # ensure User model has a 1:m relationship with the Issues model
+  it { should have_many(:issues) }
+  # Validation tests
+  # ensure name, email and password_digest are present before save
+  it { should validate_presence_of(:name) }
+  it { should validate_presence_of(:email) }
+  it { should validate_uniqueness_of(:email) }
+  it { should validate_presence_of(:password_digest) }
+  it "should have manager set to false" do
+   expect(subject.manager).to be(false)
+  end
 end
