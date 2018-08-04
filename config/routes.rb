@@ -6,4 +6,6 @@ Rails.application.routes.draw do
   delete '/issues/:id', to: 'issues#destroy'
 
   post 'auth/login', to: 'authentication#authenticate'
+
+  post 'signup', to: 'users#create'
 end
