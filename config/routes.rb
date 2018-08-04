@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   post '/issues', to: 'issues#create'
   put '/issues/:id', to: 'issues#update'
   delete '/issues/:id', to: 'issues#destroy'
+
+  post 'auth/login', to: 'authentication#authenticate'
 end
