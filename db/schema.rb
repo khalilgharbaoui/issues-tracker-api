@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 2018_08_03_030847) do
   create_table "issues", force: :cascade do |t|
     t.string "title"
     t.string "created_by"
-    t.string "assigned_to"
+    t.string "assigned_to", default: ""
     t.string "status", default: "pending"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
