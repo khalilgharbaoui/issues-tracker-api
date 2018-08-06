@@ -1,11 +1,14 @@
-# README
+# Issues Tracker API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Coming Soon....
+
+Diagram, Instructions, Deployment
 
 Things you may want to cover:
-
+* Rails version
+5.2.0
 * Ruby version
+2.5.1
 
 * System dependencies
 
