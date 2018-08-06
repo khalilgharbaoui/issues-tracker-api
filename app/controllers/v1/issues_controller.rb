@@ -7,9 +7,9 @@ module V1
     # GET /issues
     def index
       @issues = if current_user.manager?
-                  Issue.all.order('created_at DESC')
+                  Issue.all.paginate(page: params[:page], per_page: 25).order('created_at DESC')
                 else
-                  current_user.issues.order('created_at DESC')
+                  current_user.issues.paginate(page: params[:page], per_page: 25).order('created_at DESC')
                 end
       render json: @issues, status: :ok
     end
