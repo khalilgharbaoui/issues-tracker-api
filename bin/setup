@@ -30,10 +30,11 @@ chdir APP_ROOT do
   puts '==== Installing dependencies ===='
   puts '== install bundler =='
   system! 'gem install bundler --no-doc --no-ri --version 1.16.3'
+  system! 'gem install pg -v "1.0.0" --source "https://rubygems.org/"'
   puts '== run bundle check =='
   system('bundle check')
   puts '== running bundle install =='
-  system!('bundle install --jobs 16')
+  system!('bundle install --jobs 8')
   sleep 1
   puts "==== Preparing database ===="
   sleep 1

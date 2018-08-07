@@ -10,6 +10,9 @@ comming soon...
 
 ###### setup:
 ```
+rbenv install 2.5.1
+```
+```
 git clone https://github.com/khalilgharbaoui/issues-tracker-api.git
 cd issues-tracker-api
 ./bin/setup
@@ -20,7 +23,7 @@ cd issues-tracker-api
 `comming soon...`
 
 #### RUBY VERSION
-   ruby 2.5.1p57
+   2.5.1
 
 #### DEPENDENCIES
   active_model_serializers (~> 0.10.0)
