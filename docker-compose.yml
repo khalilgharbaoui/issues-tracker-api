@@ -1,0 +1,24 @@
+# docker-compose.yml
+
+version: '3'
+services:
+  db:
+    image: postgres:alpine
+    # volumes:
+      # - "~/web/issues-tracker-api/data/:/var/lib/postgresql/data"
+    # We're mounting this folder so we can backup/restore database dumps from our app folder.
+  web:
+    image: kaygeee/issues-tracker-api:latest
+    command:   ["puma", "-e", "development"]
+    ports:
+      # HOST:CONTAINER
+      - "3000:3000"
+    environment:
+      # hardcoded for now!
+      - RAILS_MASTER_KEY=a7cc157361705f6ee2cca00c70b927ab
+      - DATABASE_URL=postgres://postgres:issues_tracker_api@db:5432/issues_tracker_api
+      - DOCKENV=true
+    # volumes:
+      # HOST:CONTAINER:ro <=read only
+    depends_on:
+      - db
