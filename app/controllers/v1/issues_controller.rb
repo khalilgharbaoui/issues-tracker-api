@@ -31,19 +31,17 @@ module V1
     # PUT /issues/:id
     def update
       if current_user.manager?
-        begin
-          conditional_update
-        rescue ArgumentError => e
-          json_response({
-                          message: e.message,
-                          assigned_to: "User ID, '1' for example",
-                          status: "'pending', 'in progress' or 'resolved'"
-                        }, :not_acceptable)
-        end
+        conditional_update
       else
         @issue.update(issue_params)
         head :no_content
       end
+      rescue ArgumentError => e
+        json_response({
+                        message: e.message,
+                        assigned_to: " '#{current_user.id}' or '' ",
+                        status: " 'pending', 'in progress' or 'resolved' "
+                      }, :bad_request)
     end
 
     # DELETE /issues/:id
@@ -63,8 +61,8 @@ module V1
     rescue ActiveRecord::RecordNotFound => e
       json_response({
                       message: e.message,
-                      explanation: 'View, Update or Delete what is yours! no cheating!'
-                    }, :unauthorized)
+                      explanation: 'Does not exist or you are not allowed!'
+                    }, :not_found)
     end
 
     def issue_params
@@ -90,15 +88,66 @@ module V1
 
     def assigning_allowed?
       assigning_rules = []
-      assigning_rules << params[:assigned_to].to_i == current_user.id
       if @issue.status == 'pending'
-        assigning_rules << params[:assigned_to].blank?
+        if @issue.assigned_to.blank?
+          if params[:assigned_to].blank? && params[:status].blank?
+           raise ArgumentError.new("Issue #{@issue.status} and assigned to: #{@issue.manager ? @issue.manager.id : ' ⚠️ nobody ⚠️ '}") if params[:status].blank?
+          end
+          if !!(params[:assigned_to].to_i != current_user.id.to_i) #you
+            raise ArgumentError.new("Issue can only be assigned to: #{current_user.id}") if !params[:assigned_to].blank?
+            raise ArgumentError.new("Issue is #{@issue.status} and unassigned! must be assigned to change status!") if params[:assigned_to].blank?
+          end
+          assigning_rules << !!(params[:assigned_to].to_i == current_user.id.to_i)
+          assigning_rules << params[:assigned_to].blank?
+        elsif @issue.assigned_to.to_i == current_user.id.to_i
+          if params[:status] == 'in progress' || params[:status] == 'resolved'
+            if params[:assigned_to].blank?
+              params[:assigned_to] = current_user.id.to_i
+              raise ArgumentError.new("Issue can only change status when assigned!") unless @issue.assigned_to.to_i == params[:assigned_to].to_i
+            end
+          end
+          if !!(params[:assigned_to].to_i == @issue.assigned_to.to_i) # you
+            raise ArgumentError.new("Issue already assigned to: #{@issue.manager.id}") if params[:status].blank? && !params[:assigned_to].blank?
+          end
+          if !params[:assigned_to].blank? && !!(params[:assigned_to].to_i != current_user.id.to_i) # you
+            raise ArgumentError.new("Issue can only be assigned to: #{@issue.manager.id || current_user.id}")
+          end
+          assigning_rules << !!(params[:assigned_to].to_i == current_user.id.to_i)
+          assigning_rules << params[:assigned_to].blank?
+        elsif @issue.assigned_to.to_i != current_user.id.to_i #someone else
+          if !!(params[:assigned_to].to_i != @issue.assigned_to.to_i)
+            raise ArgumentError.new("Issue already assigned to: #{@issue.manager.id}") if !params[:assigned_to].blank?
+            raise ArgumentError.new("Issue can't be modified. #{@issue.status} and assigned to: #{@issue.manager.id}") if params[:assigned_to].blank?
+          end
+          if !!(params[:assigned_to].to_i == @issue.assigned_to.to_i)
+            raise ArgumentError.new("Issue already assigned to: #{@issue.manager.id}")
+          end
+          assigning_rules << !!(params[:assigned_to].to_i == current_user.id.to_i)
+          assigning_rules << params[:assigned_to].blank?
+        end
       elsif @issue.status == 'in progress' || @issue.status == 'resolved'
-        params[:assigned_to] = current_user.id # silently keeps current user as assignee
-        assigning_rules << params[:assigned_to].blank? if params[:status] == 'pending'
+       unless !!(current_user.id.to_i == @issue.assigned_to.to_i)
+         raise ArgumentError.new("Issue is #{@issue.status} and assigned to: #{@issue.manager ? @issue.manager.id : ' ⚠️ nobody ⚠️ '}")
+       end
+       if params[:assigned_to].blank? && params[:status].blank?
+        raise ArgumentError.new("Issue can't be unassigned when #{@issue.status} and assigned to: #{@issue.manager.id}")
+       end
+      if !!(params[:assigned_to].to_i == @issue.assigned_to.to_i) && params[:status].blank?
+        raise ArgumentError.new("Issue already assigned to: #{@issue.manager.id}")
+      end
+      if !params[:assigned_to].blank? && !!(params[:assigned_to].to_i != @issue.assigned_to.to_i || params[:assigned_to].to_i != current_user.id.to_i)
+        raise ArgumentError.new("Issue can only be assigned to: #{@issue.manager.id} (you!)")
+      end
+      # silently keeps current user as assignee
+      params[:assigned_to] = current_user.id
+      assigning_rules << !!(params[:assigned_to].to_i == current_user.id.to_i)
+      assigning_rules << params[:assigned_to].blank? if params[:status] == 'pending'
+      params[:assigned_to] = current_user.id if @issue.assigned_to.blank?
       end
       assigning_rules.any?
     end
+
+
 
     def status_allowed?
       allowed_statuses = ['pending', 'in progress', 'resolved']
