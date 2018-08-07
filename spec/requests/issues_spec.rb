@@ -72,7 +72,7 @@ RSpec.describe 'Issues API', type: :request do
     end
 
     context 'when the record does not exist' do
-      let(:issue_id) { 100 }
+      let(:issue_id) { 997992 }
 
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
