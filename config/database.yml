@@ -8,9 +8,13 @@ default: &default
 development:
   <<: *default
   database: issues_tracker_api_development
+  username: issues_tracker_api
+  password: issues_tracker_api
 test:
   <<: *default
   database: issues_tracker_api_test
+  username: issues_tracker_api
+  password: issues_tracker_api
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
 # ever seen by anyone, they now have access to your database.
