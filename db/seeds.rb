@@ -1,13 +1,13 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
-i = 0
+User.create!([
+  # Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjIxNjQ3ODQ5MTd9.cGZHBZ6JdyjPGVIH7dBsQIr3BQAu7tlbZ_f4f5ggFGI'
+  # password: password1
+  {name: "User1", email: "user1@gmail.com", password_digest: "$2a$10$Ws3bThS9HcdM4zm2MiPAO.yuXoagaxB/jOKxykzsIqt9P7VAYlUfq", manager: false},
+  # Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjIxNjQ3ODUyMzV9.a02R0yCL4I01NqDSRBomRJl_w-OReEr9SkXOYuboGKo'
+  # password: password1
+  {name: "Manager1", email: "manager1@gmail.com", password_digest: "$2a$10$0gVFq7jo92/VIYMusuAUbeWztzY7rzZpA3BDswlIH4lksmSuxoY..", manager: true}
+])
 
-30.times do
-  i + 1
-  issue = Issue.create(title: "ISSUE ##{i} "+Faker::Lorem.word, created_by: User.first.id)
+30.times.each_with_index do  |i|
+  issue = Issue.create(title: "ISSUE ##{i} "+Faker::Lorem.word, created_by: !!(i.even?) ? User.first.id : User.second.id)
+  sleep 0.23
 end
