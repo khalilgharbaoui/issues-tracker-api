@@ -11,6 +11,7 @@ module V1
                 else
                   current_user.issues.paginate(page: params[:page], per_page: 25).order('created_at DESC')
       end
+      @issues = @issues.status(params[:status]) if params[:status].present?
       render json: @issues, status: :ok
     end
 
