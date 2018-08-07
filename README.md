@@ -1,27 +1,44 @@
 # Issues Tracker API
-
+#### DIAGRAM
 Coming Soon....
 
-Diagram, Instructions, Deployment
+#### INSTRUCTIONS
 
-Things you may want to cover:
-* Rails version
-5.2.0
-* Ruby version
-2.5.1
+###### usage:
 
-* System dependencies
+comming soon...
 
-* Configuration
+###### setup:
+```
+git clone https://github.com/khalilgharbaoui/issues-tracker-api.git
+cd issues-tracker-api
+./bin/setup
+```
 
-* Database creation
+#### DEPLOYMENT
 
-* Database initialization
+`comming soon...`
 
-* How to run the test suite
+#### RUBY VERSION
+   ruby 2.5.1p57
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+#### DEPENDENCIES
+  active_model_serializers (~> 0.10.0)
+  bcrypt (~> 3.1.7)
+  bootsnap (>= 1.1.0)
+  database_cleaner
+  factory_bot_rails
+  faker
+  jwt
+  listen (>= 3.0.5, < 3.2)
+  pg
+  pry-rails
+  puma (~> 3.11)
+  rails (~> 5.2.0)
+  rspec-rails (~> 3.7)
+  seed_dump
+  shoulda-matchers (~> 3.1)
+  spring
+  spring-watcher-listen (~> 2.0.0)
+  tzinfo-data
+  will_paginate (~> 3.1.0)
