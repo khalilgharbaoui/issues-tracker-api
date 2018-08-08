@@ -11,26 +11,10 @@ end
 
 chdir APP_ROOT do
   # This script is a starting point to setup your application.
-  # Add necessary setup steps to this file.
-
-  puts '==== Skip docker setup ===='
-  # This works if docker and docker-compose are installed:
-  # system! 'if [[ $(which docker) && $(docker --version) ]] && [[ $(which docker-compose) && $(docker-compose --version) ]]; then
-  #           echo "docker and docker-compose availeble!"
-  #             # commands
-  #             docker-compose run web bundle exec rake db:create db:migrate db:seed DISABLE_DATABASE_ENVIRONMENT_CHECK=1
-  #             docker rm issues-tracker-api_web_run_1
-  #             sleep 3
-  #             echo "booting now..."
-  #             docker-compose up
-  #           else
-  #             echo "Too bad no docker!"
-  #             # command
-  #          fi'
   puts '==== Installing dependencies ===='
   puts '== install bundler =='
   system! 'gem install bundler --no-doc --no-ri --version 1.16.3'
-  system! 'gem install pg --no-doc --no-ri --version 1.0.0 --source https://rubygems.org/'
+  # system! 'gem install pg --no-doc --no-ri --version 1.0.0 --source https://rubygems.org/'
   puts '== run bundle check =='
   system('bundle check')
   puts '== running bundle install =='
@@ -40,8 +24,8 @@ chdir APP_ROOT do
   sleep 1
   puts "== setting database environment to development =="
   system 'bundle exec rails db:environment:set RAILS_ENV=development'
-  puts "== running db:create, db:schema:load, db:seed =="
-  system 'bundle exec rails db:setup'
+  puts "== running db:drop db:create, db:schema:load, db:seed =="
+  system 'bundle exec rails db:drop db:setup'
   sleep 1
   puts '==== Running tests ===='
   system 'bundle exec rspec spec -fd'

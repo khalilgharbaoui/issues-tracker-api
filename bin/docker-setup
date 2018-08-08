@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+require 'fileutils'
+include FileUtils
+
+# path to your application root.
+APP_ROOT = File.expand_path('..', __dir__)
+
+def system!(*args)
+  system(*args) || abort("\n==== Command #{args} failed ====")
+end
+
+chdir APP_ROOT do
+  # This script is a starting point to setup your application.
+
+  puts '==== Docker setup ===='
+  #This works if docker and docker-compose are installed:
+  system 'if [[ $(which docker) && $(docker --version) ]] && [[ $(which docker-compose) && $(docker-compose --version) ]]; then
+           echo "docker and docker-compose available!"
+          fi'
+
+  system 'if [[ $(which docker) && $(docker --version) ]] && [[ $(which docker-compose) && $(docker-compose --version) ]]; then
+            echo "docker and docker-compose available!"
+              # commands
+              docker-compose run web bundle exec rake db:create db:migrate db:seed DISABLE_DATABASE_ENVIRONMENT_CHECK=1
+              sleep 2
+              docker rm issues-tracker-api_web_run_1
+              sleep 3
+              docker rm issues-tracker-api_web_run_2
+              sleep 3
+              echo "booting now..."
+              docker-compose up
+            else
+              echo "Too bad no docker!"
+              # command
+           fi'
+end
