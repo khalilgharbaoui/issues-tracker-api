@@ -51,21 +51,7 @@ cd issues-tracker-api
 
 ## USAGE
 
-**NOTE:** Some users and issues already exist!
-
-User1 is not a manager.
-email: `user1@gmail.com` password: `password1`
-`Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjIxNjQ3ODQ5MTd9.cGZHBZ6JdyjPGVIH7dBsQIr3BQAu7tlbZ_f4f5ggFGI'`
-
-User2 is a manager.
-email: `manager1@gmail.com` password: `password1`
-`Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjIxNjQ3ODUyMzV9.a02R0yCL4I01NqDSRBomRJl_w-OReEr9SkXOYuboGKo'`
-
-To add and create your own issues and users or managers read below!
-
-### Instructions and Examples
-
-_**requirements:**_
+#### Requirements:
 You will need a *CLI tool* or REST *HTTP Client* like:
 
 - HTTPie `brew install httpie` ( https://github.com/jakubroztocil/httpie )
@@ -74,32 +60,61 @@ You will need a *CLI tool* or REST *HTTP Client* like:
 - `cURL`
 - etc... ( ruby's `Net::HTTP` is also an option )
 
-The app run on `localhost` port `3000`
-
-**Supported HTTP requests and examples are as the following:**
-
-|**VERB**|**URI**|**parameters**|**required?**|
-|-|-|-|-|
-| `GET` | `http://localhost:3000/v1/issues`| **`page=="2"`** *and*/*or* **`status="pending"`** | _optional_ |
-| `GET` | `http://localhost:3000/v1/issues/4` |||
-| `POST` | `http://localhost:3000/v1/issues` | **`title="Awesome issue#1"`** | _mandatory_ |
-| `PUT` | `http://localhost:3000/v1/issues/3` | **`assigned_to="1"`** *or* **`status="resolved"`** | _mandatory_ ⚠️|
-| `DELETE` | `http://localhost:3000/v1/issues/2` |||
-| `POST` | `http://localhost:3000/auth/login` | **`email="manager1@gmail.com"` `password="password1"`** | _mandatory_ |
-| `POST` | `http://localhost:3000/signup` | **`name="User1"` `email="user1@gmail.com"` `manager="false"` `password="password1"` `password_confirmation="password1"`** | _mandatory_ |
-
-⚠️ To un-assigne an issue you have to add the **`assigned_to=`** param but _**with a blank value!**_
-This is only possible when the issue status pending!!
-Also possible with postman see usage example #3 below.
+The app runs on `localhost` port `3000` ( http://localhost:3000 )
 
 ### **Authentication**
 
 Each request is only authorized with an `Authorization` token.
 When a user is created, after the `signup` the API responds with an `auth_token` token.
+
 On each subsequent `login` the API responds with a new `auth_token` token.
 The `auth_token` is only valid for a certain amount of time! (20 years in this app :P)
 
-⚠️ If you want to make API requests you have to pass in your `auth_token` in the `Authorization` request Header field as value.
+⚠️ If you want to make API requests you have to pass in your `auth_token` in the `Authorization` request Header field.
+
+**NOTE:**
+Some users and issues already exist!
+
+User1 is not a manager.
+To login and get a new token with User1 past this command in your terminal: (needs HTTPie)
+`http POST http://localhost:3000/auth/login?email=user1@gmail.com&password=password1`
+
+Or use this command in your terminal with the existing token: (needs HTTPie)
+```bash
+http GET :3000/issues \
+Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjIxNjQ3ODQ5MTd9.cGZHBZ6JdyjPGVIH7dBsQIr3BQAu7tlbZ_f4f5ggFGI'
+```
+
+Manager1 is a manager.
+To login and get a new token with Manager1 past this command in your terminal: (needs HTTPie)
+`http POST http://localhost:3000/auth/login?email=manager1@gmail.com&password=password1`
+
+Or use this command in your terminal with the existing token: (needs HTTPie)
+
+```bash
+http GET :3000/issues \
+Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjIxNjQ3ODUyMzV9.a02R0yCL4I01NqDSRBomRJl_w-OReEr9SkXOYuboGKo'
+```
+
+To add and create your own users or managers and issues read below!
+
+**Supported HTTP requests and examples are as the following:**
+
+|**VERB**|**URL**|**PARAMETERS**|**MANDATORY?**|
+|-|-|-|-|
+| `GET` | `http://localhost:3000/v1/issues`| **`page==2`** *and*/*or* **`status=pending`** | _optional_ |
+| `GET` | `http://localhost:3000/v1/issues/4` |||
+| `POST` | `http://localhost:3000/v1/issues` | **`title="Awesome issue#1"`** | _mandatory_ |
+| `PUT` | `http://localhost:3000/v1/issues/3` | **`assigned_to="1"`** *or* **`status=resolved`** | _mandatory_ ⚠️|
+| `DELETE` | `http://localhost:3000/v1/issues/2` |||
+| `POST` | `http://localhost:3000/auth/login` | **`email=manager1@gmail.com` `password=password1`** | _mandatory_ |
+| `POST` | `http://localhost:3000/signup` | **`name=NewManager1` `email=newuser1@gmail.com` `manager=true` `password=password1` `password_confirmation="password1"`** | _mandatory_ |
+
+⚠️ To un-assigne an issue you have to add the **`assigned_to=`** param but _**with a blank value!**_
+This is only possible when the issue status is pending!
+Also possible with postman see usage example #3 below.
+
+### Examples:
 
 ❕**Example request #1:** Listing all pending issues with HTTPie:
 ```bash
@@ -112,7 +127,7 @@ http :3000/issues/21 Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHA
 ```
 
 I omitted the `GET` verb & the first part of the url `http://localhost`.
-`GET` is the default for any request if no verb id provided!.
+`GET` is the default for any request if no verb provided!
 As long as i pass port `:3000` it know to look for the `localhost`. Awesome!
 
 ✅ This is the response:
