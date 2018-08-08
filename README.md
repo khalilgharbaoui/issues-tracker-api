@@ -103,13 +103,13 @@ To add and create your own users or managers and issues read below!
 
 |**VERB**|**URL**|**PARAMETERS**|**MANDATORY?**|
 |-|-|-|-|
-| `GET` | `http://localhost:3000/v1/issues`| **`page==2`** *and*/*or* **`status=pending`** | _optional_ |
-| `GET` | `http://localhost:3000/v1/issues/4` |||
-| `POST` | `http://localhost:3000/v1/issues` | **`title="Awesome issue#1"`** | _mandatory_ |
-| `PUT` | `http://localhost:3000/v1/issues/3` | **`assigned_to="1"`** *or* **`status=resolved`** | _mandatory_ ⚠️|
-| `DELETE` | `http://localhost:3000/v1/issues/2` |||
-| `POST` | `http://localhost:3000/auth/login` | **`email=manager1@gmail.com` `password=password1`** | _mandatory_ |
-| `POST` | `http://localhost:3000/signup` | **`name=NewManager1` `email=newuser1@gmail.com` `manager=true` `password=password1` `password_confirmation="password1"`** | _mandatory_ |
+| `GET` | `http://localhost:3000/issues`| **`page==2`** *and*/*or* **`status=pending`** | _optional_ |
+| `GET` | `http://localhost:3000/issues/4` | ❌ | ❌ |
+| `POST` | `http://localhost:3000/issues` | **`title="Awesome issue#1"`** | _mandatory_ |
+| `PUT` | `http://localhost:3000/issues/3` | **`assigned_to=1`** *or* **`status=resolved`** | _mandatory_ ⚠️|
+| `DELETE` | `http://localhost:3000/issues/2` | ❌ | ❌ |
+| `POST` | `http://localhost:3000/auth/login` | **`email=manager1@gmail.com` `password=password1`** | _both mandatory_ |
+| `POST` | `http://localhost:3000/signup` | **`name=NewManager1` `email=newuser1@gmail.com` `manager=true` `password=password1` `password_confirmation=password1`** | _all mandatory_ |
 
 ⚠️ To un-assigne an issue you have to add the **`assigned_to=`** param but _**with a blank value!**_
 This is only possible when the issue status is pending!
@@ -130,7 +130,7 @@ http :3000/issues/21 Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHA
 
 I omitted the `GET` verb & the first part of the url `http://localhost`.
 `GET` is the default for any request if no verb provided!
-As long as i pass port `:3000` it know how to look for the `localhost`. Awesome!
+As long as i pass port `:3000` it knows how to look for the `localhost`. Awesome!
 
 ✅ This is the response:
 ```json
