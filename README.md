@@ -112,7 +112,6 @@ To add and create your own users or managers and issues read below!
 | `POST` | `http://localhost:3000/signup` | **`name=NewManager1` `email=newuser1@gmail.com` `manager=true` `password=password1` `password_confirmation=password1`** | _all mandatory_ |
 
 ⚠️ To un-assigne an issue you have to add the **`assigned_to=`** param but _**with a blank value!**_
-This is only possible when the issue status is pending!
 Also possible with postman see usage example #3 below.
 
 ### Examples:
