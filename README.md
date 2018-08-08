@@ -108,10 +108,11 @@ To add and create your own users or managers and issues read below!
 | `POST` | `http://localhost:3000/issues` | **`title="Awesome issue#1"`** | _mandatory_ |
 | `PUT` | `http://localhost:3000/issues/3` | **`assigned_to=1`** *or* **`status=resolved`** | _mandatory_ ⚠️|
 | `DELETE` | `http://localhost:3000/issues/2` | ❌ | ❌ |
-| `POST` | `http://localhost:3000/auth/login` | **`email=manager1@gmail.com` `password=password1`** | _both mandatory_ |
+| `POST` | `http://localhost:3000/auth/login` | **`email=manager1@gmail.com` `password=password1`** | _all mandatory_ |
 | `POST` | `http://localhost:3000/signup` | **`name=NewManager1` `email=newuser1@gmail.com` `manager=true` `password=password1` `password_confirmation=password1`** | _all mandatory_ |
 
 ⚠️ To un-assigne an issue you have to add the **`assigned_to=`** param but _**with a blank value!**_
+
 Also possible with postman see usage example #3 below.
 
 ### Examples:
