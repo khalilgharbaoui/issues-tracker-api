@@ -1,14 +1,13 @@
 # Issues Tracker API
-## DIAGRAM
-Coming Soon....
-
 ## SETUP INSTRUCTIONS
 
 There are 2 available versions of the setup:
 
-`./bin/setup` ( *requires local ruby version* 2.5.1)
+Regular setup: `./bin/setup` ( *requires local ruby version* 2.5.1)
+
 _**or**_
-`./bin/docker-setup` ( *requires* docker *and* docker-compose *on your system* )
+
+Docker setup: `./bin/docker-setup` ( *requires* docker *and* docker-compose *on your system* )
 
 ### Regular setup:
 _**requirements:**_
@@ -77,6 +76,7 @@ Some users and issues already exist!
 
 User1 is not a manager.
 To login and get a new token with User1 past this command in your terminal: (needs HTTPie)
+
 `http POST http://localhost:3000/auth/login?email=user1@gmail.com&password=password1`
 
 Or use this command in your terminal with the existing token: (needs HTTPie)
@@ -87,6 +87,7 @@ Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjIxNjQ3ODQ5MTd9.cGZ
 
 Manager1 is a manager.
 To login and get a new token with Manager1 past this command in your terminal: (needs HTTPie)
+
 `http POST http://localhost:3000/auth/login?email=manager1@gmail.com&password=password1`
 
 Or use this command in your terminal with the existing token: (needs HTTPie)
@@ -121,6 +122,7 @@ Also possible with postman see usage example #3 below.
 http GET http://localhost:3000/issues status="pending" \
 Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjIxNjQ3ODUyMzV9.a02R0yCL4I01NqDSRBomRJl_w-OReEr9SkXOYuboGKo'
 ```
+
 ❕**Example request #2:** Get issues #21 with HTTPie:
 ```bash
 http :3000/issues/21 Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjIxNjQ3ODUyMzV9.a02R0yCL4I01NqDSRBomRJl_w-OReEr9SkXOYuboGKo'
@@ -128,7 +130,7 @@ http :3000/issues/21 Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHA
 
 I omitted the `GET` verb & the first part of the url `http://localhost`.
 `GET` is the default for any request if no verb provided!
-As long as i pass port `:3000` it know to look for the `localhost`. Awesome!
+As long as i pass port `:3000` it know how to look for the `localhost`. Awesome!
 
 ✅ This is the response:
 ```json
@@ -150,6 +152,7 @@ X-Runtime: 0.006877
     "updated_at": "2018-08-08T00:49:37.636Z"
 }
 ```
+
 ❕**Example request #3:** Assigning and Unassigning manager #2 from/to issue #1 with Postman:**
 
 ![alt issue-tracker-api](http://g.recordit.co/I1Ezrm5Eac.gif "Assigning and Unassigning")

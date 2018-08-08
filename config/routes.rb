@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  root to: 'v1/issues#index'
+
   scope module: :v2, constraints: ApiVersion.new('v2') do
     resources :issues, only: :index
   end
