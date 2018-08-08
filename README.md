@@ -51,13 +51,17 @@ cd issues-tracker-api
 
 ## USAGE
 
-**NOTE: 2 users already exist.**
+**NOTE:** Some users and issues already exist!
 
 User1 is not a manager.
+email: `user1@gmail.com` password: `password1`
 `Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjIxNjQ3ODQ5MTd9.cGZHBZ6JdyjPGVIH7dBsQIr3BQAu7tlbZ_f4f5ggFGI'`
 
 User2 is a manager.
+email: `manager1@gmail.com` password: `password1`
 `Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjIxNjQ3ODUyMzV9.a02R0yCL4I01NqDSRBomRJl_w-OReEr9SkXOYuboGKo'`
+
+To add and create your own issues and users or managers read below!
 
 ### Instructions and Examples
 
@@ -70,19 +74,20 @@ You will need a *CLI tool* or REST *HTTP Client* like:
 - `cURL`
 - etc... ( ruby's `Net::HTTP` is also an option )
 
-The app is runs on `localhost` port `3000`
+The app run on `localhost` port `3000`
 
 **Supported HTTP requests and examples are as the following:**
 
 |**VERB**|**URI**|**parameters**|**required?**|
-|-|
+|-|-|-|-|
 | `GET` | `http://localhost:3000/v1/issues`| **`page=="2"`** *and*/*or* **`status="pending"`** | _optional_ |
 | `GET` | `http://localhost:3000/v1/issues/4` |||
 | `POST` | `http://localhost:3000/v1/issues` | **`title="Awesome issue#1"`** | _mandatory_ |
 | `PUT` | `http://localhost:3000/v1/issues/3` | **`assigned_to="1"`** *or* **`status="resolved"`** | _mandatory_ ⚠️|
 | `DELETE` | `http://localhost:3000/v1/issues/2` |||
-| `POST` | `http://localhost:3000/auth/login` | **`email="manager1@gmail.com"`** *and* **`password="password1"`** | _mandatory_ |
-| `POST` | `http://localhost:3000/signup` | **`name="User1"`** *and* **`email="user1@gmail.com"`** *and* **`password="password1"`** *and* **`password_confirmation="password1"`** | _mandatory_ |
+| `POST` | `http://localhost:3000/auth/login` | **`email="manager1@gmail.com"` `password="password1"`** | _mandatory_ |
+| `POST` | `http://localhost:3000/signup` | **`name="User1"` `email="user1@gmail.com"` `manager="false"` `password="password1"` `password_confirmation="password1"`** | _mandatory_ |
+
 ⚠️ To un-assigne an issue you have to add the **`assigned_to=`** param but _**with a blank value!**_
 This is only possible when the issue status pending!!
 Also possible with postman see usage example #3 below.
@@ -96,15 +101,16 @@ The `auth_token` is only valid for a certain amount of time! (20 years in this a
 
 ⚠️ If you want to make API requests you have to pass in your `auth_token` in the `Authorization` request Header field as value.
 
-❕**Example request #1:** Listing all pending issues with HTTPie:**
+❕**Example request #1:** Listing all pending issues with HTTPie:
 ```bash
 http GET http://localhost:3000/issues status="pending" \
 Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjIxNjQ3ODUyMzV9.a02R0yCL4I01NqDSRBomRJl_w-OReEr9SkXOYuboGKo'
 ```
-❕**Example request #2:** Get issues #21 with HTTPie:**
+❕**Example request #2:** Get issues #21 with HTTPie:
 ```bash
 http :3000/issues/21 Authorization:'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJleHAiOjIxNjQ3ODUyMzV9.a02R0yCL4I01NqDSRBomRJl_w-OReEr9SkXOYuboGKo'
 ```
+
 I omitted the `GET` verb & the first part of the url `http://localhost`.
 `GET` is the default for any request if no verb id provided!.
 As long as i pass port `:3000` it know to look for the `localhost`. Awesome!
@@ -132,8 +138,6 @@ X-Runtime: 0.006877
 ❕**Example request #3:** Assigning and Unassigning manager #2 from/to issue #1 with Postman:**
 
 ![alt issue-tracker-api](http://g.recordit.co/I1Ezrm5Eac.gif "Assigning and Unassigning")
-
-
 
 ## DEPLOYMENT
 
