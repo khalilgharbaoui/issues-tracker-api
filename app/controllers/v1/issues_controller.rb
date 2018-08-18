@@ -16,7 +16,7 @@ module V1
     # POST /issues
     def create
       authorize Issue
-      @issue = current_user.issues.create!(issue_params)
+      @issue = current_user.issues.create!(permitted_attributes(@issue))
       render json: @issue, status: :created
     rescue Exception => e
       render json: { message: e.message }, status: :unprocessable_entity
@@ -32,7 +32,7 @@ module V1
       if current_user.manager?
         conditional_update
       else
-        @issue.update(issue_params)
+        @issue.update(permitted_attributes(@issue))
         head :no_content
       end
     rescue ArgumentError => e
@@ -65,21 +65,11 @@ module V1
                     }, :not_found)
     end
 
-    def issue_params
-      params_array = []
-      if current_user.manager? && current_user.assigned_issues.include?(@issue)
-        params_array << %i[assigned_to status]
-      end
-      if current_user.manager? && @issue.manager != current_user && @issue.assigned_to.blank?
-        params_array << [:assigned_to]
-      end
-      params_array << [:title] unless current_user.manager?
-      params.permit(params_array)
-    end
+
 
     def conditional_update
       if assigning_allowed? && status_allowed?
-        @issue.update(issue_params)
+        @issue.update(permitted_attributes(@issue))
         head :no_content
       else
         raise ArgumentError
