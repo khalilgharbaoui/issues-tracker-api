@@ -6,21 +6,19 @@ module V1
 
     # GET /issues
     def index
-      @issues = if current_user.manager?
-                  Issue.all.paginate(page: params[:page], per_page: 25).order('created_at DESC')
-                else
-                  current_user.issues.paginate(page: params[:page], per_page: 25).order('created_at DESC')
-      end
+      authorize @issues = policy_scope(Issue)
+                          .paginate(page: params[:page], per_page: 25)
+                          .order('created_at DESC')
       @issues = @issues.status(params[:status]) if params[:status].present?
       render json: @issues, status: :ok
     end
 
     # POST /issues
     def create
+      authorize Issue
       @issue = current_user.issues.create!(issue_params)
       render json: @issue, status: :created
     rescue Exception => e
-      # raise e
       render json: { message: e.message }, status: :unprocessable_entity
     end
 
@@ -47,18 +45,19 @@ module V1
 
     # DELETE /issues/:id
     def destroy
-      @issue.destroy
-      head :no_content
+        if @issue.present?
+         authorize @issue
+         @issue.destroy
+         head :no_content
+       else
+         skip_authorization
+       end
     end
 
     private
 
     def set_issue
-      @issue = if current_user.manager?
-                 Issue.find(params[:id])
-               else
-                 current_user.issues.find(params[:id])
-      end
+      authorize @issue = policy_scope(Issue).find(params[:id])
     rescue ActiveRecord::RecordNotFound => e
       json_response({
                       message: e.message,
