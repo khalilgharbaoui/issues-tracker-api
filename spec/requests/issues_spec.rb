@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Issues API', type: :request do
 
   let(:user) { create(:user) }
-  let!(:issues) { create_list(:issue, 10, created_by: user.id)  }
+  let!(:issues) { create_list(:issue, 10, user_id: user.id)  }
   let(:issue_id) { issues.first.id }
 
   # authorize request
@@ -24,7 +24,7 @@ RSpec.describe 'Issues API', type: :request do
 
   describe 'POST /issues' do
     let(:valid_attributes) do
-      { title: "Valid issue #1", created_by: user.id.to_s, assigned_to:"nobody", status:"pending" }.to_json
+      { title: "Valid issue #1", user_id: user.id.to_s, assigned_to:"nobody", status:"pending" }.to_json
     end
 
     context "when post request is valid" do
