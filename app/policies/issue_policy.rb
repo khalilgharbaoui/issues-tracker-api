@@ -7,7 +7,7 @@ class IssuePolicy < ApplicationPolicy
       if user.manager?
         scope.all
       else
-        scope.where(created_by: user.id)
+        scope.where(user_id: user.id)
       end
     end
   end
@@ -17,11 +17,11 @@ class IssuePolicy < ApplicationPolicy
   end
 
   def show?
-    user.manager? || (record.user == user)
+    manager? || owner?
   end
 
   def create?
-    user && !user.manager?
+    user && !manager?
   end
 
   def new?
@@ -37,7 +37,7 @@ class IssuePolicy < ApplicationPolicy
   end
 
   def destroy?
-    (record.user == user) && !user.manager?
+    owner? && !manager?
   end
 
   def permitted_attributes_for_create
@@ -45,13 +45,12 @@ class IssuePolicy < ApplicationPolicy
   end
 
   def permitted_attributes_for_update
-    if assigned_manager?
-      %i[assigned_to status]
-    elsif unassigned_manager?
-      [:assigned_to]
-    else
-      [:title]
+    params = if assigned_manager?
+               %i[assigned_to status]
+             elsif unassigned_manager?
+               %i[assigned_to status] if issue_unassigned? || pending?
     end
+    params || [:title]
   end
 
   private
@@ -61,14 +60,26 @@ class IssuePolicy < ApplicationPolicy
   end
 
   def manager?
-    user.manager?
+    user.manager? # || user.access_level >= 3
+  end
+
+  def assigned?
+    user == record.manager
+  end
+
+  def issue_unassigned?
+    record.assigned_to.blank?
+  end
+
+  def pending?
+    record.status == 'pending'
   end
 
   def assigned_manager?
-    manager? && user == record.manager
+    manager? && assigned?
   end
 
   def unassigned_manager?
-    manager && user != record.manager
+    manager? && !assigned?
   end
 end
