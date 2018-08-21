@@ -145,7 +145,7 @@ X-Runtime: 0.006877
 {
     "assigned_to": "",
     "created_at": "2018-08-08T00:49:37.636Z",
-    "created_by": "1",
+    "user_id": "1",
     "id": 21,
     "status": "pending",
     "title": "ISSUE #20 in",
