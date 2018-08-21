@@ -1,5 +1,6 @@
-Rails.application.routes.draw do
+# frozen_string_literal: true
 
+Rails.application.routes.draw do
   root to: 'v1/issues#index'
 
   scope module: :v2, constraints: ApiVersion.new('v2') do
@@ -7,11 +8,7 @@ Rails.application.routes.draw do
   end
 
   scope module: :v1, constraints: ApiVersion.new('v1', true) do
-    get '/issues', to: 'issues#index'
-    get '/issues/:id', to: 'issues#show'
-    post '/issues', to: 'issues#create'
-    put '/issues/:id', to: 'issues#update'
-    delete '/issues/:id', to: 'issues#destroy'
+    resources :issues, only: %i[index show create update destroy]
   end
 
   post 'auth/login', to: 'authentication#authenticate'

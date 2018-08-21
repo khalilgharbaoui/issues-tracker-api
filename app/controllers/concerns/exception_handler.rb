@@ -16,8 +16,8 @@ module ExceptionHandler
     rescue_from ExceptionHandler::InvalidToken, with: :four_twenty_two
     rescue_from ActionController::UnpermittedParameters, with: :unauthorized_request
     rescue_from Pundit::NotAuthorizedError, with: :unauthorized_request
-    rescue_from ArgumentError, with: :four_zero_zero
     rescue_from ActiveRecord::RecordNotFound, with: :four_zero_four
+    rescue_from ArgumentError, with: :four_zero_zero
     # rescue_from ActiveModel::StrictValidationFailed, with:  :four_zero_zero
   end
 
