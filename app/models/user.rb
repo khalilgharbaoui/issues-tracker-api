@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   # Model associations
-  has_many :issues, :class_name => "Issue", :foreign_key => "created_by"
+  has_many :issues, inverse_of: :user
   has_many :assigned_issues, :class_name => "Issue", :foreign_key => "assigned_to"
 
   # Validations
