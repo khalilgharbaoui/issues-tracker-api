@@ -13,7 +13,7 @@ describe IssuePolicy do
     let(:user) { create(:user, id: 1, manager: false) }
 
     context 'accessing owened issues' do
-      let(:issue) { create(:issue, id: 1, created_by: user.id) }
+      let(:issue) { create(:issue, id: 1, user_id: user.id) }
 
       it 'includes issue in resolved scope' do
         expect(resolved_scope).to include(issue)
@@ -27,7 +27,7 @@ describe IssuePolicy do
     end
 
     context 'accessing an not owned issue' do
-      let(:issue) { Issue.create(created_by: 8998) }
+      let(:issue) { Issue.create(user_id: 8998) }
 
       it 'excludes issue from resolved scope' do
         expect(resolved_scope).not_to include(issue)
@@ -43,9 +43,9 @@ describe IssuePolicy do
     let(:user) { create(:user, id: 1, manager: true) }
     let(:user0) { create(:user, id: 2, manager: false, email: 'anotheremail@h.com') }
     context 'accessing all issues' do
-      let(:issue) { create(:issue, id: 1, created_by: user.id) }
-      let(:issue2) { create(:issue, id: 2, created_by: user0.id) }
-      let(:issue3) { create(:issue, id: 3, created_by: user0.id) }
+      let(:issue) { create(:issue, id: 1, user_id: user.id) }
+      let(:issue2) { create(:issue, id: 2, user_id: user0.id) }
+      let(:issue3) { create(:issue, id: 3, user_id: user0.id) }
 
       it 'includes issue in resolved scope' do
         expect(resolved_scope).to include(issue, issue2, issue3)
@@ -59,7 +59,7 @@ describe IssuePolicy do
     end
 
     context 'accessing an not owned issue' do
-      let(:issue) { create(:issue, id: 3, created_by: user0.id) }
+      let(:issue) { create(:issue, id: 3, user_id: user0.id) }
 
       it 'includes issue from resolved scope' do
         expect(resolved_scope).to include(issue)
