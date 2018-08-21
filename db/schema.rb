@@ -12,9 +12,12 @@
 
 ActiveRecord::Schema.define(version: 2018_08_03_030847) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "issues", force: :cascade do |t|
     t.string "title"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.string "assigned_to", default: ""
     t.string "status", default: "pending"
     t.datetime "created_at", null: false
