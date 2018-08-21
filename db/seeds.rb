@@ -8,6 +8,6 @@ User.create!([
 ])
 
 30.times.each_with_index do  |i|
-  issue = Issue.create(title: "ISSUE ##{i} "+Faker::Lorem.word, created_by: !!(i.even?) ? User.first.id : User.second.id)
+  issue = Issue.create(title: "ISSUE ##{i} "+Faker::Lorem.word, user_id: i.even? ? User.first.id : User.second.id)
   sleep 0.23
 end
