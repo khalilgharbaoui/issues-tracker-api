@@ -79,7 +79,7 @@ GEM
     ffi (1.9.25-x86-mingw32)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    i18n (1.0.1)
+    i18n (1.1.0)
       concurrent-ruby (~> 1.0)
     jsonapi-renderer (0.2.0)
     jwt (2.1.0)
