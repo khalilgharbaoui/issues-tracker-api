@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ExceptionHandler
   extend ActiveSupport::Concern
 
@@ -12,13 +14,11 @@ module ExceptionHandler
     rescue_from ExceptionHandler::AuthenticationError, with: :unauthorized_request
     rescue_from ExceptionHandler::MissingToken, with: :four_twenty_two
     rescue_from ExceptionHandler::InvalidToken, with: :four_twenty_two
-    rescue_from Pundit::NotAuthorizedError do |e|
-      user_not_authorized(e)
-    end
-
-    rescue_from ActiveRecord::RecordNotFound do |e|
-      json_response({ message: e.message }, :not_found)
-    end
+    rescue_from ActionController::UnpermittedParameters, with: :unauthorized_request
+    rescue_from Pundit::NotAuthorizedError, with: :unauthorized_request
+    rescue_from ArgumentError, with: :four_zero_zero
+    rescue_from ActiveRecord::RecordNotFound, with: :four_zero_four
+    # rescue_from ActiveModel::StrictValidationFailed, with:  :four_zero_zero
   end
 
   private
@@ -33,7 +33,13 @@ module ExceptionHandler
     json_response({ message: e.message }, :unauthorized)
   end
 
-  def user_not_authorized(e)
-    json_response({ message: e.message }, :unauthorized)
+  # JSON response with message; Status code 400 - Bad Request
+  def four_zero_zero(e)
+    json_response({ message: e.message, assigned_to: "'#{current_user.id}', ''" }, :bad_request)
+  end
+
+  # JSON response with message; Status code 400 - Bad Request
+  def four_zero_four(e)
+    json_response({ message: e.message }, :not_found)
   end
 end
