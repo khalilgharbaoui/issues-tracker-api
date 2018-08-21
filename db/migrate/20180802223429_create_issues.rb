@@ -2,7 +2,7 @@ class CreateIssues < ActiveRecord::Migration[5.2]
   def change
     create_table :issues do |t|
       t.string :title
-      t.string :created_by
+      t.references :user
       t.string :assigned_to, default: ""
       t.string :status, default: "pending"
 
