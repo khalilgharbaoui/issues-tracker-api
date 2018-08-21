@@ -35,7 +35,7 @@ module ExceptionHandler
 
   # JSON response with message; Status code 400 - Bad Request
   def four_zero_zero(e)
-    json_response({ message: e.message, assigned_to: "'#{current_user.id}', ''" }, :bad_request)
+    json_response({ message: e.message }, :bad_request)
   end
 
   # JSON response with message; Status code 400 - Bad Request
