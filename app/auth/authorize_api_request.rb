@@ -18,6 +18,7 @@ class AuthorizeApiRequest
     # check if user is in the database
     # memoize user object
     @user ||= User.find(decoded_auth_token[:user_id]) if decoded_auth_token
+    Current.user = @user # we set Current.user singleton here!!!!!!
     # handle user not found
   rescue ActiveRecord::RecordNotFound => e
     # raise custom error
