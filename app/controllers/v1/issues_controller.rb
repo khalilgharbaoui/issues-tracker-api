@@ -11,15 +11,15 @@ module V1
                           .paginate(page: params[:page], per_page: 25)
                           .order('created_at DESC')
       @issues = @issues.status(params[:status]) if params[:status].present?
-      render json: @issues, status: :ok
+      json_response(@issues)
     end
 
     def create
       authorize Issue
       @issue = current_user.issues.create!(permitted_attributes(Issue))
-      render json: @issue, status: :created
+      json_response(@issue, :created)
     rescue StandardError => e
-      render json: { message: e.message }, status: :unprocessable_entity
+      json_response({ message: e.message }, :unprocessable_entity)
     end
 
     def show
