@@ -14,11 +14,12 @@ ActiveRecord::Schema.define(version: 2018_08_03_030847) do
 
   create_table "issues", force: :cascade do |t|
     t.string "title"
-    t.string "created_by"
+    t.integer "user_id"
     t.string "assigned_to", default: ""
     t.string "status", default: "pending"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_issues_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
